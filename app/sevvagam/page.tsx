@@ -2,6 +2,12 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
+declare global {
+  interface Window {
+    Razorpay: any
+  }
+}
+
 /* ── Colour tokens ──────────────────────────────────────────── */
 const C = {
   terracotta:     '#C4622D',
@@ -27,18 +33,21 @@ function SevButton({
   fullWidth = false,
   type = 'button',
   onClick,
+  disabled = false,
 }: {
   children: React.ReactNode
   fullWidth?: boolean
   type?: 'button' | 'submit'
   onClick?: () => void
+  disabled?: boolean
 }) {
   const [hovered, setHovered] = useState(false)
   return (
     <button
       type={type}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
+      disabled={disabled}
+      onMouseEnter={() => !disabled && setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         position: 'relative',
@@ -51,10 +60,11 @@ function SevButton({
         letterSpacing: '0.16em',
         textTransform: 'uppercase',
         background: 'transparent',
-        cursor: 'pointer',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.55 : 1,
         width: fullWidth ? '100%' : 'auto',
         display: 'block',
-        transition: 'color 0.45s cubic-bezier(0.76, 0, 0.24, 1)',
+        transition: 'color 0.45s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.3s',
       }}
     >
       <div
@@ -172,6 +182,9 @@ export default function SevvagamPage() {
   const [errors, setErrors]         = useState<Record<string, string>>({})
   const [focused, setFocused]       = useState<string | null>(null)
   const [submitted, setSubmitted]   = useState(false)
+  const [paymentLoading, setPaymentLoading] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null)
+  const [paymentError, setPaymentError]     = useState<string | null>(null)
 
   /* ── GSAP ─────────────────────────────────────────────── */
   useEffect(() => {
@@ -253,6 +266,17 @@ export default function SevvagamPage() {
     return () => { clearTimeout(t); ctx?.revert() }
   }, [])
 
+  /* ── Razorpay script ──────────────────────────────────── */
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.async = true
+    document.body.appendChild(script)
+    return () => {
+      if (document.body.contains(script)) document.body.removeChild(script)
+    }
+  }, [])
+
   /* ── Form ─────────────────────────────────────────────── */
   const inputStyle = (field: string): React.CSSProperties => ({
     width: '100%',
@@ -283,6 +307,73 @@ export default function SevvagamPage() {
     if (!formData.message.trim()) errs.message = 'Please tell us about the space'
     if (Object.keys(errs).length) { setErrors(errs); return }
     setSubmitted(true)
+  }
+
+  const handlePayment = async () => {
+    setPaymentLoading(true)
+    setPaymentError(null)
+    try {
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: 1_000_000 }),
+      })
+      if (!res.ok) throw new Error('Order creation failed')
+      const order = await res.json()
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Blush & Hush',
+        description: 'Sevvagam Commission Deposit',
+        order_id: order.order_id,
+        handler: async (response: {
+          razorpay_order_id: string
+          razorpay_payment_id: string
+          razorpay_signature: string
+        }) => {
+          try {
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            })
+            const verifyData = await verifyRes.json()
+            if (verifyRes.ok && verifyData.success) {
+              setPaymentSuccess(response.razorpay_payment_id)
+            } else {
+              setPaymentError('Payment could not be verified. Please contact hello@blushandhush.in')
+            }
+          } catch {
+            setPaymentError('Verification error. Please contact hello@blushandhush.in')
+          } finally {
+            setPaymentLoading(false)
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        theme: { color: C.terracotta },
+        modal: { ondismiss: () => setPaymentLoading(false) },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.on('payment.failed', () => {
+        setPaymentError('Payment was not completed. Please try again.')
+        setPaymentLoading(false)
+      })
+      rzp.open()
+    } catch {
+      setPaymentError('Something went wrong. Please try again or write to hello@blushandhush.in')
+      setPaymentLoading(false)
+    }
   }
 
   const set = (k: string) =>
@@ -821,14 +912,40 @@ export default function SevvagamPage() {
           Lead time — 4 to 6 weeks from commission date
         </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
-          <SevButton
-            onClick={() => {
-              document.getElementById('commission-form')?.scrollIntoView({ behavior: 'smooth' })
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginTop: '48px' }}>
+          <SevButton onClick={handlePayment} disabled={paymentLoading}>
+            {paymentLoading ? 'Opening payment…' : 'Pay Commission Deposit — ₹10,000 →'}
+          </SevButton>
+          <button
+            onClick={() => document.getElementById('commission-form')?.scrollIntoView({ behavior: 'smooth' })}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-dm-sans)',
+              fontSize: '11px',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'rgba(247,240,230,0.5)',
+              textDecoration: 'underline',
+              textUnderlineOffset: '4px',
+              padding: '8px 0',
             }}
           >
-            Commission yours →
-          </SevButton>
+            Or send an enquiry →
+          </button>
+          {paymentError && (
+            <p style={{
+              fontFamily: 'var(--font-dm-sans)',
+              fontSize: '12px',
+              color: C.brassLight,
+              textAlign: 'center',
+              maxWidth: '360px',
+              lineHeight: 1.7,
+            }}>
+              {paymentError}
+            </p>
+          )}
         </div>
 
         <p style={{
@@ -852,7 +969,50 @@ export default function SevvagamPage() {
           {/* Divider */}
           <div style={{ borderTop: '0.5px solid rgba(247,240,230,0.15)', marginBottom: '48px' }} />
 
-          {submitted ? (
+          {paymentSuccess ? (
+            <div style={{ textAlign: 'center', padding: '48px 0' }}>
+              <p style={{
+                fontFamily: 'var(--font-dm-sans)',
+                fontSize: '10px',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: C.brassLight,
+              }}>
+                Commission Secured
+              </p>
+              <h3 style={{
+                fontFamily: 'var(--font-cormorant)',
+                fontStyle: 'italic',
+                fontWeight: 300,
+                fontSize: '28px',
+                color: C.cream,
+                marginTop: '16px',
+                lineHeight: 1.4,
+              }}>
+                Your Sevvagam is reserved.
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-dm-sans)',
+                fontSize: '14px',
+                color: 'rgba(247,240,230,0.65)',
+                marginTop: '20px',
+                lineHeight: 1.85,
+              }}>
+                We have received your deposit. The studio will reach<br />
+                out within one business day to begin the making process.
+              </p>
+              <p style={{
+                fontFamily: 'var(--font-dm-sans)',
+                fontSize: '9px',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'rgba(247,240,230,0.3)',
+                marginTop: '28px',
+              }}>
+                Payment ref — {paymentSuccess}
+              </p>
+            </div>
+          ) : submitted ? (
             <div style={{ textAlign: 'center', padding: '48px 0' }}>
               <h3 style={{
                 fontFamily: 'var(--font-cormorant)',

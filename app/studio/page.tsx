@@ -46,7 +46,7 @@ export default function StudioPage() {
         </div>
 
         {/* Right — text */}
-        <div className="flex flex-col justify-center px-10 md:px-14 py-16" style={{ backgroundColor: 'var(--ivory)' }}>
+        <div className="flex flex-col justify-center px-6 md:px-14 py-16" style={{ backgroundColor: 'var(--ivory)' }}>
           <p className="label mb-5" style={{ color: 'var(--gold)' }}>Est. Chennai · 2018</p>
           <h2
             className="font-cormorant italic mb-6"

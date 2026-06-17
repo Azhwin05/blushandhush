@@ -42,10 +42,10 @@ export default function Nav() {
         {/* Logo */}
         <Link href="/" className="flex items-center" onClick={closeMenu}>
           <Image
-            src={scrolled || menuOpen ? '/logo-navy.svg' : '/logo-ivory.svg'}
+            src={scrolled ? '/logo-navy.png' : '/logo-ivory.png'}
             alt="Blush & Hush"
-            width={80}
-            height={28}
+            width={88}
+            height={44}
             priority
             className="transition-opacity duration-500"
           />
@@ -83,7 +83,7 @@ export default function Nav() {
         {/* Mobile: "Menu" or "Close" */}
         <button
           className="md:hidden label"
-          style={{ color: scrolled || menuOpen ? 'var(--navy)' : 'var(--ivory)' }}
+          style={{ color: scrolled ? 'var(--navy)' : 'var(--ivory)' }}
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Toggle menu"
         >

@@ -50,7 +50,7 @@ export default function ShopPage() {
         className="flex items-center justify-between px-6 md:px-10 py-5 overflow-x-auto gap-6"
         style={{ backgroundColor: 'var(--ivory)', borderBottom: '0.5px solid var(--linen)' }}
       >
-        <div className="flex items-center gap-6 flex-wrap">
+        <div className="flex items-center gap-6 overflow-x-auto">
           {FILTERS.map((f) => (
             <button
               key={f}

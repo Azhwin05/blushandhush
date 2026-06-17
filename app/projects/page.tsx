@@ -35,7 +35,7 @@ export default function ProjectsPage() {
 
       {/* Filter row */}
       <div
-        className="flex items-center gap-8 px-10 py-6 overflow-x-auto"
+        className="flex items-center gap-8 px-6 md:px-10 py-6 overflow-x-auto"
         style={{ backgroundColor: 'var(--ivory)', borderBottom: '0.5px solid var(--linen)' }}
       >
         {FILTERS.map((f) => (
@@ -107,14 +107,15 @@ function ProjectListItem({
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <div
-          className="w-full h-full img-placeholder"
-          style={{ backgroundColor: '#1e2d3e' }}
-        >
-          <span style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.12em', textTransform: 'uppercase', textAlign: 'center' }}>
-            {project.title}
-          </span>
-        </div>
+        {project.hero ? (
+          <img src={project.hero} alt={project.title} className="w-full h-full object-cover" style={{ display: 'block' }} />
+        ) : (
+          <div className="w-full h-full img-placeholder" style={{ backgroundColor: '#1e2d3e' }}>
+            <span style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.12em', textTransform: 'uppercase', textAlign: 'center' }}>
+              {project.title}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Row content */}

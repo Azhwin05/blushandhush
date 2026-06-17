@@ -99,16 +99,14 @@ export default function HomePage() {
       {/* ── 1.4 FEATURED PROJECTS GRID ─────────────────────── */}
       <section className="py-24 px-6 md:px-10" style={{ backgroundColor: 'var(--ivory)' }}>
         <div
-          className="grid gap-[3px] project-grid"
+          className="grid gap-[3px] project-grid grid-cols-1 md:grid-cols-3"
           style={{
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gridTemplateRows: 'auto auto auto',
             backgroundColor: 'var(--navy)',
           }}
         >
           {/* Hero card — spans 2 cols × 2 rows */}
           {featured[0] && (
-            <ProjectCard project={featured[0]} number="01" className="col-span-2 row-span-2" tall />
+            <ProjectCard project={featured[0]} number="01" className="md:col-span-2 md:row-span-2" tall />
           )}
           {featured[1] && (
             <ProjectCard project={featured[1]} number="02" />
@@ -118,14 +116,14 @@ export default function HomePage() {
           )}
           {/* Wide card — full width bottom */}
           {projects[3] && (
-            <div className="col-span-3">
+            <div className="md:col-span-3">
               <ProjectCard project={projects[3]} number="04" wide />
             </div>
           )}
         </div>
 
         {/* CTA row */}
-        <div className="flex items-center justify-between mt-8">
+        <div className="flex items-center justify-between flex-wrap gap-y-3 mt-8">
           <p className="label" style={{ color: 'var(--steel)' }}>
             {projects.length} completed projects across India &amp; UAE
           </p>
@@ -277,7 +275,7 @@ export default function HomePage() {
       <section className="grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
         {/* Left */}
         <div
-          className="flex flex-col justify-center px-10 md:px-16 py-16"
+          className="flex flex-col justify-center px-6 md:px-16 py-16"
           style={{ backgroundColor: 'var(--navy)' }}
           data-dark
         >
@@ -301,7 +299,7 @@ export default function HomePage() {
         </div>
 
         {/* Right — mini contact form */}
-        <div className="flex flex-col justify-center px-10 md:px-16 py-16" style={{ backgroundColor: 'var(--ivory)' }}>
+        <div className="flex flex-col justify-center px-6 md:px-16 py-16" style={{ backgroundColor: 'var(--ivory)' }}>
           <MiniContactForm />
         </div>
       </section>

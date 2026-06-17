@@ -47,7 +47,7 @@ export default function ContactPage() {
       <main className="grid grid-cols-1 md:grid-cols-2 min-h-screen pt-[72px]">
         {/* Left — navy */}
         <div
-          className="flex flex-col justify-between px-10 md:px-16 py-16"
+          className="flex flex-col justify-between px-6 md:px-16 py-16"
           style={{ backgroundColor: 'var(--navy)' }}
           data-dark
         >
@@ -97,7 +97,7 @@ export default function ContactPage() {
 
         {/* Right — ivory / form */}
         <div
-          className="flex flex-col justify-center px-10 md:px-16 py-16"
+          className="flex flex-col justify-center px-6 md:px-16 py-16"
           style={{ backgroundColor: 'var(--ivory)' }}
         >
           {sent ? (

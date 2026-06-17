@@ -9,10 +9,10 @@ export default function Footer() {
         {/* Col 1 — Logo */}
         <div className="flex flex-col gap-4 relative">
           <Image
-            src="/logo-ivory.svg"
+            src="/logo-ivory.png"
             alt="Blush & Hush"
-            width={160}
-            height={56}
+            width={176}
+            height={88}
           />
           {/* Watermark logo behind */}
           <div
@@ -20,10 +20,10 @@ export default function Footer() {
             style={{ opacity: 0.06 }}
           >
             <Image
-              src="/logo-ivory.svg"
+              src="/logo-ivory.png"
               alt=""
-              width={320}
-              height={112}
+              width={352}
+              height={176}
               aria-hidden="true"
             />
           </div>

@@ -16,41 +16,53 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
   const galleryRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
 
-  // Horizontal scroll gallery via GSAP ScrollTrigger
+  // Horizontal scroll gallery — CSS sticky for pinning, GSAP only for x translation
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const isMobile = window.innerWidth < 768
-    if (isMobile) return
+    if (window.innerWidth < 768) return
 
-    let gsap: any, ScrollTrigger: any, ctx: any
+    let mounted = true
+    let cleanup: (() => void) | undefined
 
-    import('gsap').then((g) => {
-      import('gsap/ScrollTrigger').then((st) => {
-        gsap = g.gsap
-        ScrollTrigger = st.ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger)
+    ;(async () => {
+      const { gsap } = await import('gsap')
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      if (!mounted) return
 
-        const track = trackRef.current
-        const gallery = galleryRef.current
-        if (!track || !gallery) return
+      gsap.registerPlugin(ScrollTrigger)
 
-        ctx = gsap.context(() => {
-          gsap.to(track, {
-            x: () => -(track.scrollWidth - window.innerWidth),
-            ease: 'none',
-            scrollTrigger: {
-              trigger: gallery,
-              pin: true,
-              scrub: 1,
-              end: () => '+=' + track.scrollWidth,
-              invalidateOnRefresh: true,
-            },
-          })
+      const gallery = galleryRef.current
+      const track = trackRef.current
+      if (!gallery || !track) return
+
+      // Give the outer section enough height for the horizontal scroll distance
+      const setHeight = () => {
+        gallery.style.height = `${window.innerHeight + track.scrollWidth - window.innerWidth}px`
+      }
+      setHeight()
+
+      const ctx = gsap.context(() => {
+        gsap.to(track, {
+          x: () => -(track.scrollWidth - window.innerWidth),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: gallery,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1,
+            invalidateOnRefresh: true,
+            onRefresh: setHeight,
+          },
         })
       })
-    })
 
-    return () => ctx?.revert()
+      cleanup = () => ctx.revert()
+    })()
+
+    return () => {
+      mounted = false
+      cleanup?.()
+    }
   }, [])
 
   const galleryImages = [
@@ -64,13 +76,19 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
 
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative h-screen" style={{ backgroundColor: 'var(--navy)' }} data-dark>
-        <div className="absolute inset-0 img-placeholder" style={{ backgroundColor: '#1a2a3a' }}>
-          <span
-            className="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2"
-            style={{ color: 'var(--steel)', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'center' }}
-          >
-            Photography placeholder: {project.title} hero
-          </span>
+        <div className="absolute inset-0">
+          {project.hero ? (
+            <img src={project.hero} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
+          ) : (
+            <div className="absolute inset-0 img-placeholder" style={{ backgroundColor: '#1a2a3a' }}>
+              <span
+                className="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2"
+                style={{ color: 'var(--steel)', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'center' }}
+              >
+                Photography placeholder: {project.title} hero
+              </span>
+            </div>
+          )}
         </div>
         <div
           className="absolute inset-0"
@@ -101,7 +119,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         style={{ backgroundColor: 'var(--ivory)', borderBottom: '0.5px solid var(--linen)' }}
       >
         <h1
-          className="font-cormorant italic"
+          className="font-cormorant italic min-w-0 truncate"
           style={{ fontSize: '24px', fontWeight: 300, color: 'var(--navy)' }}
         >
           {project.title}
@@ -114,43 +132,53 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </button>
       </div>
 
-      {/* ── Horizontal Photo Gallery ──────────────────────── */}
-      <section ref={galleryRef} data-cursor="drag" className="gallery-section">
-        <div
-          ref={trackRef}
-          className="photo-track flex"
-          style={{ width: 'max-content' }}
-        >
-          {galleryImages.map((img, i) => (
-            <div
-              key={i}
-              className="flex-shrink-0 img-placeholder"
-              style={{
-                width: '70vw',
-                height: '80vh',
-                marginRight: '3px',
-                backgroundColor: `hsl(${210 + i * 8}, 30%, ${15 + i * 3}%)`,
-              }}
-            >
-              <span style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                Photography placeholder: {project.title} — {i + 1}
-              </span>
-            </div>
-          ))}
+      {/* ── Horizontal Photo Gallery (desktop only) ──────── */}
+      <section ref={galleryRef} data-cursor="drag" className="hidden md:block">
+        {/* Sticky viewport — CSS handles the pin, no GSAP DOM changes */}
+        <div className="sticky top-0 overflow-hidden" style={{ height: '100vh' }}>
+          <div
+            ref={trackRef}
+            className="flex h-full"
+            style={{ width: 'max-content' }}
+          >
+            {galleryImages.map((img, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0"
+                style={{ width: '85vw', height: '100vh', marginRight: '3px', position: 'relative', overflow: 'hidden' }}
+              >
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`${project.title} — ${i + 1}`}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div className="absolute inset-0 img-placeholder" style={{ backgroundColor: `hsl(${210 + i * 8}, 30%, ${15 + i * 3}%)` }}>
+                    <span style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                      Photography placeholder: {project.title} — {i + 1}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Mobile gallery — vertical */}
       <section className="md:hidden flex flex-col gap-[3px] px-4 py-10" style={{ backgroundColor: 'var(--ivory)' }}>
-        {galleryImages.slice(0, 3).map((img, i) => (
-          <div
-            key={i}
-            className="img-placeholder aspect-video w-full"
-            style={{ backgroundColor: `hsl(${210 + i * 8}, 30%, ${15 + i * 3}%)` }}
-          >
-            <span style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              Photography placeholder: {project.title} — {i + 1}
-            </span>
+        {galleryImages.map((img, i) => (
+          <div key={i} className="w-full" style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden' }}>
+            {img ? (
+              <img src={img} alt={`${project.title} — ${i + 1}`} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <div className="w-full h-full img-placeholder" style={{ backgroundColor: `hsl(${210 + i * 8}, 30%, ${15 + i * 3}%)` }}>
+                <span style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                  Photography placeholder: {project.title} — {i + 1}
+                </span>
+              </div>
+            )}
           </div>
         ))}
       </section>

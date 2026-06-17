@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
 import Razorpay from 'razorpay'
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-})
-
 const COMMISSION_DEPOSIT_PAISE = 1_000_000 // ₹10,000
 
 export async function POST(request: Request) {
+  const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID!,
+    key_secret: process.env.RAZORPAY_KEY_SECRET!,
+  })
+
   try {
     const body = await request.json().catch(() => ({}))
     const amount = Number(body.amount ?? COMMISSION_DEPOSIT_PAISE)

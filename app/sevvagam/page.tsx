@@ -83,20 +83,36 @@ function SevButton({
   )
 }
 
-/* ── Photography placeholder ────────────────────────────────── */
+/* ── Photo — real image or placeholder ──────────────────────── */
 function Photo({
   label,
   bg,
   labelColor,
   minHeight = 480,
   className = '',
+  src,
 }: {
   label: string
   bg: string
   labelColor: string
   minHeight?: number
   className?: string
+  src?: string
 }) {
+  if (src) {
+    return (
+      <div
+        className={`w-full ${className}`}
+        style={{ minHeight, overflow: 'hidden', position: 'relative' }}
+      >
+        <img
+          src={src}
+          alt={label}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight, display: 'block' }}
+        />
+      </div>
+    )
+  }
   return (
     <div
       className={`w-full flex items-center justify-center ${className}`}
@@ -417,6 +433,7 @@ export default function SevvagamPage() {
               labelColor="rgba(247,240,230,0.35)"
               minHeight={420}
               className="w-full"
+              src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055398/sevvaagam_7_lckvcr.jpg"
             />
           </div>
         </div>
@@ -534,6 +551,7 @@ export default function SevvagamPage() {
             bg={`rgba(139,94,60,0.1)`}
             labelColor={`rgba(139,94,60,0.35)`}
             minHeight={560}
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055398/sevvaagam_4_ukubsn.jpg"
           />
         </div>
       </section>
@@ -554,6 +572,7 @@ export default function SevvagamPage() {
             labelColor="rgba(139,94,60,0.3)"
             minHeight={480}
             className="h-full"
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055395/sevvaagam_5_fie41p.jpg"
           />
         </div>
         <div className="flex flex-col justify-center px-10 py-16 md:px-16 md:py-20">
@@ -640,6 +659,7 @@ export default function SevvagamPage() {
             labelColor="rgba(212,168,83,0.3)"
             minHeight={480}
             className="h-full"
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055403/sevvaagam_6_zdbcqg.jpg"
           />
         </div>
       </section>
@@ -656,6 +676,7 @@ export default function SevvagamPage() {
             labelColor="rgba(196,98,45,0.3)"
             minHeight={480}
             className="h-full"
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055403/sevvaagam_2_f0wj7z.jpg"
           />
         </div>
         <div className="flex flex-col justify-center px-10 py-16 md:px-16 md:py-20">
@@ -747,6 +768,7 @@ export default function SevvagamPage() {
             labelColor="rgba(247,240,230,0.2)"
             minHeight={480}
             className="h-full"
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055403/sevvaagam_3_h240bl.jpg"
           />
         </div>
       </section>
@@ -771,6 +793,7 @@ export default function SevvagamPage() {
               bg="rgba(60,20,10,0.55)"
               labelColor="rgba(212,168,83,0.28)"
               minHeight={500}
+              src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055395/sevvaagam_5_fie41p.jpg"
             />
           </div>
         </div>

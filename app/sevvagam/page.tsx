@@ -425,15 +425,18 @@ export default function SevvagamPage() {
           <div
             ref={heroImgRef}
             className="sevvagam-hero-img w-full flex items-center justify-center"
-            style={{ maxWidth: '520px', margin: '0 auto' }}
+            style={{ maxWidth: '560px', margin: '0 auto', padding: '0 24px' }}
           >
-            <Photo
-              label="Photography: Sevvagam — full product on terracotta background"
-              bg="rgba(160,73,30,0.3)"
-              labelColor="rgba(247,240,230,0.35)"
-              minHeight={420}
-              className="w-full"
+            <img
               src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055398/sevvaagam_7_lckvcr.jpg"
+              alt="Sevvagam cabinet"
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                mixBlendMode: 'multiply',
+                filter: 'contrast(1.05) saturate(0.95)',
+              }}
             />
           </div>
         </div>

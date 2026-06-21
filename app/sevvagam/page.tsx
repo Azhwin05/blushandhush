@@ -103,12 +103,18 @@ function Photo({
     return (
       <div
         className={`w-full ${className}`}
-        style={{ minHeight, overflow: 'hidden', position: 'relative' }}
+        style={{ overflow: 'hidden', position: 'relative', ...(minHeight ? { minHeight } : { height: '100%' }) }}
       >
         <img
           src={src}
           alt={label}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight, display: 'block' }}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            ...(minHeight ? { minHeight } : {}),
+          }}
         />
       </div>
     )
@@ -158,13 +164,13 @@ function SpecRow({ label, value }: { label: string; value: string }) {
     <tr style={{ borderBottom: '0.5px solid #E8E0D5' }}>
       <td
         style={{
-          padding: '13px 24px 13px 0',
+          padding: '13px 16px 13px 0',
           fontFamily: 'var(--font-dm-sans)',
           fontSize: '9px',
           letterSpacing: '0.15em',
           textTransform: 'uppercase',
           color: C.steel,
-          width: '160px',
+          width: '120px',
           verticalAlign: 'top',
         }}
       >
@@ -509,7 +515,7 @@ export default function SevvagamPage() {
       {/* ════════════════════════════════════════════════ */}
       {/* SECTION 2 — OBJECT STATEMENT                   */}
       {/* ════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: C.cream, padding: '120px 24px' }}>
+      <section className="px-6 py-16 md:py-[120px]" style={{ backgroundColor: C.cream }}>
         <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center' }}>
           <p className="reveal-heading" style={{
             fontFamily: 'var(--font-dm-sans)',
@@ -571,17 +577,17 @@ export default function SevvagamPage() {
         className="material-panel grid grid-cols-1 md:grid-cols-2"
         style={{ backgroundColor: C.cream }}
       >
-        <div className="reveal-img" style={{ minHeight: '480px' }}>
+        <div className="reveal-img min-h-[300px] md:min-h-[480px]">
           <Photo
             label="Photography: Teak wood grain — extreme close-up"
             bg="rgba(139,94,60,0.13)"
             labelColor="rgba(139,94,60,0.3)"
-            minHeight={480}
+            minHeight={300}
             className="h-full"
             src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055395/sevvaagam_5_fie41p.jpg"
           />
         </div>
-        <div className="flex flex-col justify-center px-10 py-16 md:px-16 md:py-20">
+        <div className="flex flex-col justify-center px-6 py-12 md:px-16 md:py-20">
           <p className="reveal-heading" style={{
             fontFamily: 'var(--font-dm-sans)', fontSize: '10px',
             letterSpacing: '0.16em', textTransform: 'uppercase', color: C.brass,
@@ -618,12 +624,12 @@ export default function SevvagamPage() {
         </div>
       </section>
 
-      {/* Panel B — BRASS · dark-wood bg · text left, image right */}
+      {/* Panel B — BRASS · dark-wood bg · image top (mobile), text left (desktop) */}
       <section
         className="material-panel grid grid-cols-1 md:grid-cols-2"
         style={{ backgroundColor: C.darkWood }}
       >
-        <div className="flex flex-col justify-center px-10 py-16 md:px-16 md:py-20">
+        <div className="flex flex-col justify-center px-6 py-12 md:px-16 md:py-20 order-2 md:order-1">
           <p className="reveal-heading" style={{
             fontFamily: 'var(--font-dm-sans)', fontSize: '10px',
             letterSpacing: '0.16em', textTransform: 'uppercase', color: C.brassLight,
@@ -658,12 +664,12 @@ export default function SevvagamPage() {
             </p>
           </div>
         </div>
-        <div className="reveal-img" style={{ minHeight: '480px' }}>
+        <div className="reveal-img min-h-[300px] md:min-h-[480px] order-1 md:order-2">
           <Photo
             label="Photography: Brass corner rosette — extreme close-up"
             bg="rgba(181,129,58,0.18)"
             labelColor="rgba(212,168,83,0.3)"
-            minHeight={480}
+            minHeight={300}
             className="h-full"
             src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055403/sevvaagam_6_zdbcqg.jpg"
           />
@@ -675,17 +681,17 @@ export default function SevvagamPage() {
         className="material-panel grid grid-cols-1 md:grid-cols-2"
         style={{ backgroundColor: C.cream }}
       >
-        <div className="reveal-img" style={{ minHeight: '480px' }}>
+        <div className="reveal-img min-h-[300px] md:min-h-[480px]">
           <Photo
             label="Photography: Woven cane plinth — basket-weave pattern"
             bg="rgba(196,98,45,0.09)"
             labelColor="rgba(196,98,45,0.3)"
-            minHeight={480}
+            minHeight={300}
             className="h-full"
             src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055403/sevvaagam_2_f0wj7z.jpg"
           />
         </div>
-        <div className="flex flex-col justify-center px-10 py-16 md:px-16 md:py-20">
+        <div className="flex flex-col justify-center px-6 py-12 md:px-16 md:py-20">
           <p className="reveal-heading" style={{
             fontFamily: 'var(--font-dm-sans)', fontSize: '10px',
             letterSpacing: '0.16em', textTransform: 'uppercase', color: C.brass,
@@ -722,12 +728,12 @@ export default function SevvagamPage() {
         </div>
       </section>
 
-      {/* Panel D — KALAMKARI · teal-art bg · text left, image right */}
+      {/* Panel D — KALAMKARI · teal-art bg · image top (mobile), text left (desktop) */}
       <section
         className="material-panel grid grid-cols-1 md:grid-cols-2"
         style={{ backgroundColor: C.tealArt }}
       >
-        <div className="flex flex-col justify-center px-10 py-16 md:px-16 md:py-20">
+        <div className="flex flex-col justify-center px-6 py-12 md:px-16 md:py-20 order-2 md:order-1">
           <p className="reveal-heading" style={{
             fontFamily: 'var(--font-dm-sans)', fontSize: '10px',
             letterSpacing: '0.16em', textTransform: 'uppercase',
@@ -767,12 +773,12 @@ export default function SevvagamPage() {
             ))}
           </div>
         </div>
-        <div className="reveal-img" style={{ minHeight: '480px' }}>
+        <div className="reveal-img min-h-[300px] md:min-h-[480px] order-1 md:order-2">
           <Photo
             label="Photography: Kalamkari peacock tile — full panel"
             bg="rgba(26,82,82,0.45)"
             labelColor="rgba(247,240,230,0.2)"
-            minHeight={480}
+            minHeight={300}
             className="h-full"
             src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055403/sevvaagam_3_h240bl.jpg"
           />
@@ -783,17 +789,14 @@ export default function SevvagamPage() {
       {/* SECTION 4 — PRODUCT REPRISE                    */}
       {/* ════════════════════════════════════════════════ */}
       <section
-        style={{
-          backgroundColor: C.darkWood,
-          padding: '120px 24px',
-          textAlign: 'center',
-        }}
+        className="px-6 py-16 md:py-[120px] text-center"
+        style={{ backgroundColor: C.darkWood }}
       >
         <div
           className="reveal-img"
           style={{ display: 'flex', justifyContent: 'center' }}
         >
-          <div style={{ width: '100%', maxWidth: '520px' }}>
+          <div className="w-full md:max-w-[520px]">
             <Photo
               label="Photography: Sevvagam — on dark background, brass and teak illuminated"
               bg="rgba(60,20,10,0.55)"
@@ -821,7 +824,7 @@ export default function SevvagamPage() {
       {/* ════════════════════════════════════════════════ */}
       {/* SECTION 5 — SPECIFICATIONS                     */}
       {/* ════════════════════════════════════════════════ */}
-      <section style={{ backgroundColor: C.cream, padding: '100px 24px' }}>
+      <section className="px-6 py-14 md:py-[100px]" style={{ backgroundColor: C.cream }}>
         <div style={{ maxWidth: '560px', margin: '0 auto' }}>
           <p
             className="reveal-heading"
@@ -867,8 +870,7 @@ export default function SevvagamPage() {
               lineHeight: 1.65,
             }}
           >
-            &ldquo;Every Sevvagam is accompanied by the name of every<br />
-            hand that shaped it.&rdquo;
+            &ldquo;Every Sevvagam is accompanied by the name of every hand that shaped it.&rdquo;
           </p>
         </div>
       </section>
@@ -877,11 +879,8 @@ export default function SevvagamPage() {
       {/* SECTION 6 — COMMISSION CTA                     */}
       {/* ════════════════════════════════════════════════ */}
       <section
-        style={{
-          backgroundColor: C.terracotta,
-          padding: '120px 24px 80px',
-          textAlign: 'center',
-        }}
+        className="px-6 pt-16 pb-12 md:pt-[120px] md:pb-[80px] text-center"
+        style={{ backgroundColor: C.terracotta }}
       >
         <p
           className="reveal-heading"
@@ -942,9 +941,11 @@ export default function SevvagamPage() {
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginTop: '48px' }}>
-          <SevButton onClick={handlePayment} disabled={paymentLoading}>
-            {paymentLoading ? 'Opening payment…' : 'Pay Commission Deposit — ₹10,000 →'}
-          </SevButton>
+          <div className="w-full max-w-[380px]">
+            <SevButton onClick={handlePayment} disabled={paymentLoading} fullWidth>
+              {paymentLoading ? 'Opening payment…' : 'Pay Commission Deposit — ₹10,000 →'}
+            </SevButton>
+          </div>
           <button
             onClick={() => document.getElementById('commission-form')?.scrollIntoView({ behavior: 'smooth' })}
             style={{
@@ -992,7 +993,8 @@ export default function SevvagamPage() {
       {/* ════════════════════════════════════════════════ */}
       <div
         id="commission-form"
-        style={{ backgroundColor: C.terracotta, padding: '0 24px 120px' }}
+        className="px-6 pb-16 md:pb-[120px]"
+        style={{ backgroundColor: C.terracotta }}
       >
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
           {/* Divider */}
@@ -1176,15 +1178,8 @@ export default function SevvagamPage() {
       {/* SECTION 8 — BACK TO B&H                        */}
       {/* ════════════════════════════════════════════════ */}
       <div
-        style={{
-          backgroundColor: C.navy,
-          padding: '20px 40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '8px',
-        }}
+        className="px-6 md:px-10 py-5 flex items-center justify-between flex-wrap gap-2"
+        style={{ backgroundColor: C.navy }}
       >
         <p style={{
           fontFamily: 'var(--font-dm-sans)',

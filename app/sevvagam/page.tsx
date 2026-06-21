@@ -407,8 +407,30 @@ export default function SevvagamPage() {
         className="sevvagam-hero relative overflow-hidden flex flex-col"
         style={{ backgroundColor: C.terracotta, height: '100vh', minHeight: '600px' }}
       >
+        {/* Full-bleed background image */}
+        <div
+          ref={heroImgRef}
+          className="sevvagam-hero-img absolute inset-0"
+        >
+          <img
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055398/sevvaagam_7_lckvcr.jpg"
+            alt="Sevvagam cabinet"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
+          />
+        </div>
+
+        {/* Radial terracotta vignette — bleeds in from edges */}
+        <div className="absolute inset-0" style={{
+          background: `radial-gradient(ellipse 65% 75% at center 40%, transparent 25%, rgba(196,98,45,0.55) 65%, ${C.terracotta} 100%)`,
+        }} />
+
+        {/* Top + bottom gradient for text legibility */}
+        <div className="absolute inset-0" style={{
+          background: `linear-gradient(to bottom, rgba(196,98,45,0.72) 0%, transparent 22%, transparent 52%, rgba(196,98,45,0.8) 78%, ${C.terracotta} 100%)`,
+        }} />
+
         {/* Top label */}
-        <div className="flex justify-center" style={{ paddingTop: '48px' }}>
+        <div className="relative z-10 flex justify-center" style={{ paddingTop: '48px' }}>
           <p style={{
             fontFamily: 'var(--font-dm-sans)',
             fontSize: '10px',
@@ -420,30 +442,11 @@ export default function SevvagamPage() {
           </p>
         </div>
 
-        {/* Product image — centre, parallax target */}
-        <div className="flex-1 flex items-center justify-center">
-          <div
-            ref={heroImgRef}
-            className="sevvagam-hero-img w-full flex items-center justify-center"
-            style={{ maxWidth: '560px', margin: '0 auto', padding: '0 24px' }}
-          >
-            <img
-              src="https://res.cloudinary.com/dmhonzqrm/image/upload/v1782055398/sevvaagam_7_lckvcr.jpg"
-              alt="Sevvagam cabinet"
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-                mixBlendMode: 'multiply',
-                filter: 'contrast(1.05) saturate(0.95)',
-              }}
-            />
-          </div>
-        </div>
+        <div className="flex-1" />
 
         {/* Tamil name + English name + tagline */}
         <div
-          className="flex flex-col items-center text-center"
+          className="relative z-10 flex flex-col items-center text-center"
           style={{ paddingBottom: '80px', gap: '6px' }}
         >
           <p style={{

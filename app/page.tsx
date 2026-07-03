@@ -6,7 +6,7 @@ import Loader from '@/components/Loader'
 import MarqueeStrip from '@/components/MarqueeStrip'
 import TextScramble from '@/components/TextScramble'
 import Footer from '@/components/Footer'
-import { projects, products } from '@/lib/data'
+import { projects } from '@/lib/data'
 
 export default function HomePage() {
   const [loaderDone, setLoaderDone] = useState(false)
@@ -31,7 +31,6 @@ export default function HomePage() {
   }
 
   const featured = projects.slice(0, 3)
-  const featuredProduct = products[0]
 
   return (
     <>
@@ -40,15 +39,16 @@ export default function HomePage() {
 
       {/* ── 1.2 HERO ───────────────────────────────────────── */}
       <section className="relative h-screen overflow-hidden flex items-end" style={{ backgroundColor: 'var(--navy)' }}>
-        {/* Background placeholder */}
+        {/* Background image */}
         <div
           ref={heroRef}
-          className="absolute inset-0 scale-110 img-placeholder"
-          style={{ backgroundColor: '#1a2a3a' }}
+          className="absolute inset-0 scale-110"
         >
-          <span style={{ color: 'var(--steel)', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', position: 'absolute', bottom: '50%', left: '50%', transform: 'translate(-50%,50%)' }}>
-            Photography placeholder: Hero — atmospheric interior
-          </span>
+          <img
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/f_auto,q_auto/prabhu-residence-gallery-01_h8f6si.jpg"
+            alt="Skylit courtyard with turned teak columns — Prabhu's Residence"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </div>
         {/* Gradient overlay */}
         <div
@@ -114,8 +114,8 @@ export default function HomePage() {
           {featured[2] && (
             <ProjectCard project={featured[2]} number="03" />
           )}
-          {/* Wide card — full width bottom */}
-          {projects[3] && (
+          {/* Wide card — full width bottom, only when real photography exists */}
+          {projects[3]?.hero?.startsWith('http') && (
             <div className="md:col-span-3">
               <ProjectCard project={projects[3]} number="04" wide />
             </div>
@@ -202,49 +202,41 @@ export default function HomePage() {
         ))}
       </section>
 
-      {/* ── 1.8 FEATURED PRODUCT ───────────────────────────── */}
+      {/* ── 1.8 FEATURED — SEVVAGAM ────────────────────────── */}
       <section className="grid grid-cols-1 md:grid-cols-2 min-h-[540px]">
-        {/* Left — product image */}
+        {/* Left — Sevvagam image */}
         <div
-          className="img-placeholder aspect-[4/5] md:aspect-auto relative overflow-hidden"
+          className="relative overflow-hidden"
           style={{ backgroundColor: '#1a1a18', minHeight: '400px' }}
-          data-cursor="shop"
+          data-cursor="view"
         >
-          <span
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ color: 'var(--steel)', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'center', padding: '16px' }}
-          >
-            Photography placeholder: {featuredProduct.name}
-          </span>
+          <img
+            src="https://res.cloudinary.com/dmhonzqrm/image/upload/f_auto,q_auto/v1782055398/sevvaagam_4_ukubsn.jpg"
+            alt="Sevvagam — teak cabinet with Kalamkari art panel"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </div>
 
-        {/* Right — product details */}
-        <div className="flex flex-col justify-center px-10 md:px-16 py-16" style={{ backgroundColor: 'var(--ivory)' }}>
+        {/* Right — details */}
+        <div className="flex flex-col justify-center px-6 md:px-16 py-16" style={{ backgroundColor: 'var(--ivory)' }}>
           <p className="label mb-4" style={{ color: 'var(--gold)' }}>
-            New arrival — Shop
+            The Object · No. 01 — Limited Edition
           </p>
           <h2
             className="font-cormorant italic mb-4"
             style={{ fontSize: 'clamp(28px, 3vw, 42px)', fontWeight: 300, color: 'var(--navy)', lineHeight: 1.2 }}
           >
-            {featuredProduct.name}<br />{featuredProduct.subtitle}
+            Sevvagam.<br />Crafted around art.
           </h2>
           <p className="body-lg mb-4" style={{ color: 'var(--steel)' }}>
-            {featuredProduct.description.slice(0, 120)}…
+            Solid teak, hand-cast brass, a woven cane plinth — built around one original work of Srikalahasti Kalamkari. Each piece numbered and signed.
           </p>
           <p className="mb-8" style={{ color: 'var(--gold)', fontSize: '18px', fontFamily: 'var(--font-dm-sans)' }}>
-            ₹{featuredProduct.price.toLocaleString('en-IN')}
+            Made to order · Chennai
           </p>
           <div className="flex items-center gap-4">
-            <Link href={`/shop/${featuredProduct.slug}`} className="btn-primary btn-navy" data-cursor="shop">
-              <span>View product →</span>
-            </Link>
-            <Link
-              href={`/shop/${featuredProduct.slug}`}
-              className="btn-secondary"
-              style={{ color: 'var(--navy)' }}
-            >
-              Add to cart
+            <Link href="/sevvagam" className="btn-primary btn-navy" data-cursor="view">
+              <span>Discover Sevvagam →</span>
             </Link>
           </div>
         </div>
@@ -332,23 +324,39 @@ function ProjectCard({
       }}
       data-cursor="view"
     >
-      {/* Image placeholder */}
+      {/* Image or placeholder */}
+      {project.hero?.startsWith('http') ? (
+        <img
+          src={project.hero}
+          alt={project.title}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      ) : (
+        <>
+          <div
+            className="absolute inset-0 transition-opacity duration-500"
+            style={{ backgroundColor: '#1e2d3e', opacity: 0.7 }}
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span
+              style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'center', padding: '16px' }}
+            >
+              Photography placeholder: {project.title}
+            </span>
+          </div>
+        </>
+      )}
+
+      {/* Bottom gradient for title legibility */}
       <div
-        className="absolute inset-0 transition-opacity duration-500"
-        style={{ backgroundColor: '#1e2d3e', opacity: 0.7 }}
+        className="absolute inset-0"
+        style={{ background: 'linear-gradient(to top, rgba(14,27,46,0.75) 0%, rgba(14,27,46,0.1) 45%, transparent 65%)' }}
       />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span
-          style={{ color: 'var(--steel)', fontSize: '8px', letterSpacing: '0.15em', textTransform: 'uppercase', textAlign: 'center', padding: '16px' }}
-        >
-          Photography placeholder: {project.title}
-        </span>
-      </div>
 
       {/* Hover overlay */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-        style={{ backgroundColor: 'rgba(14,27,46,0.5)' }}
+        style={{ backgroundColor: 'rgba(14,27,46,0.4)' }}
       />
 
       {/* Project number */}

@@ -77,7 +77,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative h-screen" style={{ backgroundColor: 'var(--navy)' }} data-dark>
         <div className="absolute inset-0">
-          {project.hero ? (
+          {project.hero?.startsWith('http') ? (
             <img src={project.hero} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
           ) : (
             <div className="absolute inset-0 img-placeholder" style={{ backgroundColor: '#1a2a3a' }}>
@@ -147,7 +147,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
                 className="flex-shrink-0"
                 style={{ width: '85vw', height: '100vh', marginRight: '3px', position: 'relative', overflow: 'hidden' }}
               >
-                {img ? (
+                {img?.startsWith('http') ? (
                   <img
                     src={img}
                     alt={`${project.title} — ${i + 1}`}
@@ -170,7 +170,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       <section className="md:hidden flex flex-col gap-[3px] px-4 py-10" style={{ backgroundColor: 'var(--ivory)' }}>
         {galleryImages.map((img, i) => (
           <div key={i} className="w-full" style={{ position: 'relative', aspectRatio: '4/3', overflow: 'hidden' }}>
-            {img ? (
+            {img?.startsWith('http') ? (
               <img src={img} alt={`${project.title} — ${i + 1}`} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <div className="w-full h-full img-placeholder" style={{ backgroundColor: `hsl(${210 + i * 8}, 30%, ${15 + i * 3}%)` }}>

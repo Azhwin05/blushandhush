@@ -107,7 +107,7 @@ function ProjectListItem({
           transform: 'translate(-50%, -50%)',
         }}
       >
-        {project.hero ? (
+        {project.hero?.startsWith('http') ? (
           <img src={project.hero} alt={project.title} className="w-full h-full object-cover" style={{ display: 'block' }} />
         ) : (
           <div className="w-full h-full img-placeholder" style={{ backgroundColor: '#1e2d3e' }}>

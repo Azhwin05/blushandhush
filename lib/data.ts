@@ -1,5 +1,25 @@
 export const projects = [
   {
+    slug: 'qmis-school',
+    title: 'QMIS School',
+    type: 'Educational',
+    location: 'Chennai',
+    year: '2025',
+    hero: 'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108180/1_tpcx3y.jpg',
+    description: 'A learning environment designed around light, movement, and the dignity of the child. Corridors become galleries; classrooms open to the outside. Every surface was chosen not for aesthetics alone, but for how it performs under the weight of daily use and young curiosity.',
+    area: '— sq ft',
+    client: 'QMIS School',
+    materials: ['—'],
+    images: [
+      'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108185/2_f4ivlt.jpg',
+      'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108179/4_pxj3xa.jpg',
+      'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108176/5_sbaj4b.jpg',
+      'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108162/6_ebygvm.jpg',
+      'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108144/7_eenwij.jpg',
+      'https://res.cloudinary.com/dmhonzqrm/image/upload/v1783108169/DSC02526_jooswd.jpg',
+    ],
+  },
+  {
     slug: 'guvi',
     title: 'GUVI',
     type: 'Commercial',

@@ -5,7 +5,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { projects } from '@/lib/data'
 
-const FILTERS = ['All', 'Residential', 'Commercial', 'Hospitality', 'Furniture'] as const
+const FILTERS = ['All', 'Residential', 'Commercial', 'Hospitality', 'Educational', 'Furniture'] as const
 type Filter = typeof FILTERS[number]
 
 export default function ProjectsPage() {

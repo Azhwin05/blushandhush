@@ -282,7 +282,10 @@ export default function HomePage() {
           </p>
           <div>
             <p className="label-sm mb-1" style={{ color: 'var(--gold)' }}>
-              hello@blushandhush.in
+              Blushhushindia@gmail.com
+            </p>
+            <p className="label-sm" style={{ color: 'var(--gold)' }}>
+              +91 74185 42944
             </p>
             <p className="label-sm" style={{ color: 'var(--gold)' }}>
               Chennai · By appointment

@@ -72,7 +72,8 @@ export default function Footer() {
             </a>
           ))}
           <div className="mt-4">
-            <p className="body-sm" style={{ color: 'var(--steel)' }}>hello@blushandhush.in</p>
+            <p className="body-sm" style={{ color: 'var(--steel)' }}>Blushhushindia@gmail.com</p>
+            <p className="body-sm" style={{ color: 'var(--steel)' }}>+91 74185 42944</p>
             <p className="body-sm" style={{ color: 'var(--steel)' }}>Chennai, Tamil Nadu</p>
           </div>
         </div>

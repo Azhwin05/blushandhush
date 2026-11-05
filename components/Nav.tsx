@@ -132,7 +132,7 @@ export default function Nav() {
           }}
         >
           <p className="label" style={{ color: 'var(--steel)' }}>
-            hello@blushandhush.in · Chennai
+            Blushhushindia@gmail.com · +91 74185 42944 · Chennai
           </p>
         </div>
       </div>

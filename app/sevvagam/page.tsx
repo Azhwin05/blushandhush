@@ -369,10 +369,10 @@ export default function SevvagamPage() {
             if (verifyRes.ok && verifyData.success) {
               setPaymentSuccess(response.razorpay_payment_id)
             } else {
-              setPaymentError('Payment could not be verified. Please contact hello@blushandhush.in')
+              setPaymentError('Payment could not be verified. Please contact Blushhushindia@gmail.com')
             }
           } catch {
-            setPaymentError('Verification error. Please contact hello@blushandhush.in')
+            setPaymentError('Verification error. Please contact Blushhushindia@gmail.com')
           } finally {
             setPaymentLoading(false)
           }
@@ -393,7 +393,7 @@ export default function SevvagamPage() {
       })
       rzp.open()
     } catch {
-      setPaymentError('Something went wrong. Please try again or write to hello@blushandhush.in')
+      setPaymentError('Something went wrong. Please try again or write to Blushhushindia@gmail.com')
       setPaymentLoading(false)
     }
   }
@@ -984,7 +984,7 @@ export default function SevvagamPage() {
           color: 'rgba(247,240,230,0.35)',
           marginTop: '20px',
         }}>
-          Or write to us — hello@blushandhush.in
+          Or write to us — Blushhushindia@gmail.com
         </p>
       </section>
 

@@ -67,7 +67,8 @@ export default function ContactPage() {
               <div>
                 <p className="label mb-1" style={{ color: 'var(--steel)' }}>Chennai Studio</p>
                 <p className="body-sm" style={{ color: 'var(--ivory)' }}>By appointment — reach us at</p>
-                <p className="body-sm" style={{ color: 'var(--gold)' }}>hello@blushandhush.in</p>
+                <p className="body-sm" style={{ color: 'var(--gold)' }}>Blushhushindia@gmail.com</p>
+                <p className="body-sm" style={{ color: 'var(--gold)' }}>+91 74185 42944</p>
               </div>
               <div>
                 <p className="label mb-1" style={{ color: 'var(--steel)' }}>Response time</p>
